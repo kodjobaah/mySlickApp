@@ -1,0 +1,7 @@
+# slick book tutorial
+create table (
+       snum char(2) NOT NULL PRIMARY KEY,
+       sname varchar(255) NOT NULL,
+       status integer NOT NULL,
+       city varchar(255) NOT NULL
+);

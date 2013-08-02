@@ -1,0 +1,12 @@
+@(form: play.api.data.Form[Bar])
+
+@main("Welcome to Play 2.1") {
+    
+    <form action="/bars" method="POST">
+    
+       <label for="name">Name</label>
+       <input type="text" name="name" id="name">
+       <input type="submit">
+    </form>
+        
+}

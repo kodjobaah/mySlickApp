@@ -1,0 +1,8 @@
+@* suppliers Template File *@
+@(suppliers: List[Supplier])
+
+<ul>
+  @for(supplier <- suppliers) {
+    <li>@supplier</li>
+  }
+</ul>
