@@ -15,11 +15,11 @@
     </encoder>
   </appender>
   
-  <logger name="play" level="TRACE" />
+  <logger name="play" level="INFO" />
     <logger name="akka" level="TRACE" />
   <logger name="application" level="TRACE" />
 
-  <root level="TRACE">
+  <root level="INFO">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
   </root>

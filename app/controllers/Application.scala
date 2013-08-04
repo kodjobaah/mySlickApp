@@ -14,7 +14,7 @@ import play.api.data.Forms._
 import scala.slick.session.Session
 import play.api.libs.json._
 
-import models.{Bar, Bars}
+import models.{Bar, Bars, Coffees, Suppliers}
 
 import play.api.db._
 import play.api.Play.current
@@ -45,9 +45,30 @@ object Application extends Controller {
 
 	}
 	
-   def listSuppliers = Action {
-     Ok(views.html.suppliers())
-   }
+  
+	def listCoffees = Action {
+	  val coffees = database withTransaction {
+	    val cof = for(c <- Coffees)
+	      yield ConstColumn(" ") ++ c.name ++ "\t" ++ c.supID.asColumnOf[String] ++
+	      "\t" ++ c.price.asColumnOf[String] ++ "\t" ++ c.sales.asColumnOf[String] ++
+	      "\t" ++ c.total.asColumnOf[String]
+	    // The first string constant needs to be lifted manual to a ConstColumn
+	    // so that the property ++ operator is found
+	    cof.list
+	       
+	  }
+	 
+	  val coffeeSuppliers = database withTransaction {
+	    val q2 = for {
+	      c <- Coffees if c.price < 9.0
+	      s <- Suppliers if s.id === c.supID
+	    } yield (c.name, s.name)
+	    
+	    q2.list
+	  }
+	  
+	  Ok(views.html.coffees(coffees, coffeeSuppliers))
+	}
 
 	def addBar = Action {
 		implicit request =>
