@@ -1,16 +1,17 @@
 mySlickApp
 ==========
 
-This application is a sandbox for learning the different aspects of play:
+This application is a sandbox for learning play:
 
 It currently utilizes the following:
  mysql, oracle, slick and typesafe management console.
 
 Setup
 ======
-Database: Myql or Oracle
-application.conf as well as specifying the database properties..you
-will need to specify which one to use by setting the following property:
+Database: Mysql or Oracle
+
+In "application.conf" as well as specifying the database properties..you
+will need designate which database to use by setting the property below:
 mySlickApp.database = "oracle" 
 
 
@@ -18,6 +19,7 @@ Optimistic Lock using Play, Slick and Akka
 ==========
 
 Actors: OptimisticLockSupervisor, UpdateCoffeesAndRelationsActor
+
 Contollers: ActorController
 
 The following example demonstrates how actors can be used to implement an 
