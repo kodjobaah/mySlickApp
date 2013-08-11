@@ -22,14 +22,15 @@ import play.api.Play.current
 // Use M
 
 import scala.slick.driver.MySQLDriver.simple._
-
+//import com.typesafe.slick.driver.oracle.OracleDriver.simple._
 // Use the implicit threadLocalSession
 
 import Database.threadLocalSession
 
 object Application extends Controller {
 
-	lazy val database = Database.forDataSource(DB.getDataSource())
+  //lazy val database = Database.forDataSource(DB.getDataSource())
+ lazy val database = Database.forDataSource(DB.getDataSource("oracle"))
 
 	val barForm = Form (
 		mapping(
@@ -47,18 +48,23 @@ object Application extends Controller {
 	
   
 	def listCoffees = Action {
-	  val coffees = database withTransaction {
+	  val coffees = database withSession {
 	    val cof = for(c <- Coffees)
-	      yield ConstColumn(" ") ++ c.name ++ "\t" ++ c.supID.asColumnOf[String] ++
-	      "\t" ++ c.price.asColumnOf[String] ++ "\t" ++ c.sales.asColumnOf[String] ++
-	      "\t" ++ c.total.asColumnOf[String]
-	    // The first string constant needs to be lifted manual to a ConstColumn
-	    // so that the property ++ operator is found
+	      yield c
 	    cof.list
 	       
 	  }
 	 
+	  var isolationLevel: String = ""
 	  val coffeeSuppliers = database withTransaction {
+	      import java.sql.Connection
+	    isolationLevel = threadLocalSession.conn.getTransactionIsolation() match {
+	     case Connection.TRANSACTION_NONE => "NO Transaction"
+	     case Connection.TRANSACTION_READ_COMMITTED => "Read Commited"
+	     case Connection.TRANSACTION_REPEATABLE_READ => "Repeatable Read"
+	     case Connection.TRANSACTION_SERIALIZABLE => "Serializable"
+	   }
+	    
 	    val q2 = for {
 	      c <- Coffees if c.price < 9.0
 	      s <- Suppliers if s.id === c.supID
@@ -67,7 +73,11 @@ object Application extends Controller {
 	    q2.list
 	  }
 	  
-	  Ok(views.html.coffees(coffees, coffeeSuppliers))
+	  val q = Query(Coffees)
+	  
+	  val stmnt = q.selectStatement
+	  
+	  Ok(views.html.coffees(coffees, coffeeSuppliers,isolationLevel,stmnt))
 	}
 
 	def addBar = Action {
@@ -88,7 +98,8 @@ object Application extends Controller {
 	}
 
 	def getBars = Action {
-		val json = database withSession {
+	  
+	  val json = database withSession {
 			val bars = for (b <- Bars) yield b.name
 			Json.toJson(bars.list)
 		}

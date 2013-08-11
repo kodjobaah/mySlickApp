@@ -1,8 +1,8 @@
 import sbt._
 import Keys._
 import play.Project._
-import com.typesafe.sbt.SbtAtmos.atmosSettings
-import com.typesafe.sbt.SbtAtmos.traceAkka 
+//import com.typesafe.sbt.SbtAtmos.atmosSettings
+//import com.typesafe.sbt.SbtAtmos.traceAkka 
 // imports standard command parsing functionality
 import complete.DefaultParsers._
 object ApplicationBuild extends Build {
@@ -27,12 +27,10 @@ object ApplicationBuild extends Build {
   val appDependencies = Seq(
     // Add your project dependencies here,
     "org.scalatest" %% "scalatest" % "2.0.M6-SNAP26" % "test",
-    "org.scala-lang" % "scala-actors" % "2.11.0-M4" % "test",
-    //"com.typesafe.akka" %% "akka-actor" % "2.2.0",
     "com.typesafe.slick" % "slick_2.10" % "1.0.0-RC2", 
+    "com.typesafe.slick" %% "slick-extensions" % "1.0.0",
     "mysql" % "mysql-connector-java" % "5.1.18",
-    "org.fluentlenium" % "fluentlenium-core" % "0.6.0",
-    "org.fluentlenium" % "fluentlenium-festassert" % "0.6.0",
+     "com.typesafe.akka" %% "akka-actor" % "2.2.0",
     jdbc,
     anorm
   )
@@ -43,6 +41,7 @@ object ApplicationBuild extends Build {
       
   val main = play.Project(appName, appVersion, appDependencies).settings(
 	testOptions in Test := Nil,
+	autoScalaLibrary := false,
       
 	  resolvers += "JBoss repository" at "https://repository.jboss.org/nexus/content/repositories/",
       resolvers += "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots",
@@ -76,7 +75,8 @@ object ApplicationBuild extends Build {
 	  }
 	  
 	 //val atmosTrace = "com.typesafe.atmos" % "trace-akka-2.2.0_2.11.0-M3" % "1.2.0-M6"
-         val atmosTrace = "com.typesafe.atmos" % "trace-akka-2.2.0_2.10" % "1.2.0"	  
+     val atmosTrace = "com.typesafe.atmos" % "trace-akka-2.2.0_2.10" % "1.2.0"
+	  //val atmosTrace = "com.typesafe.atmos" % "trace-akka-2.2.0_2.10" % "1.2.0"	  
 //	 val atmosTrace ="com.typesafe.atmos" % "trace-akka-2.1.4" % "1.2.0"
 
 

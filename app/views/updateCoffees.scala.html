@@ -1,0 +1,81 @@
+@* updateCoffees Template File *@ @(coffeeName:String, form:
+play.api.data.Form[Coffee], coffees:List[Coffee], suppliers:
+List[Supplier], coffeeVersions: List[CoffeeVersion]) @import tags._
+
+
+<div>
+	<h1>@coffeeName</h1>
+</div>
+
+<div>
+	<table>
+	   <tr>
+	     <th>
+	        Coffee Name
+	     </th>
+	     <th>
+	        Supplier
+	     </th>
+	     <th>
+	        Price
+	     </th>
+	     <th>
+	        Sales
+	     </th>
+	     <th>
+	        Total
+	     </th>
+	     <th>
+	        Update
+	     </th>
+	     <th>
+	        Version
+	     </th>
+	   </tr>
+
+
+		@for(coffee <- coffees) {
+		<tr>
+			<form action="/actors" method="POST">
+				<td><input type="text" name="name" id="name"
+					value="@coffee.name"></td>
+				<td><select name="supID"> @for(sup <- suppliers) {
+						@selectedSupplierId(coffee.supID,sup.id,sup.name) }
+				</select></td>
+				<td><input type="text" name="price" id="price"
+					value="@coffee.price"></td>
+				<td><input type="text" name="sales" id="sales"
+					value="@coffee.sales"></td>
+				<td><input type="text" name="total" id="total"
+					value="@coffee.total"></td>
+				<td><input type="submit" ></td>
+				<td><input type="text" name="version" id="version"
+					value="@coffee.version"></td>
+			</form>
+		</tr>
+		}
+	</table>
+</div>
+
+<div style="width:100%">
+  <hr/>
+</div>
+<div>
+	<table border=1>
+		<tr>
+			<th>Version</th>
+			<th>Coffee Name</th>
+		</tr>
+		@for(cofVersion <- coffeeVersions) {
+		<tr>
+			<td>@cofVersion.version</td>
+			<td>@cofVersion.coffeeName</td>
+		</tr>
+		}
+	</table>
+</div>
+
+
+
+
+

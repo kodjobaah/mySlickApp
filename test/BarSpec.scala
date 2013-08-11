@@ -1,6 +1,7 @@
 import models.{Bars, Bar}
 
 import org.scalatest.FlatSpec
+import org.scalatest.WordSpec
 import org.scalatest.matchers.ShouldMatchers
 //Use H2Driver to connect to an H2 database
 import scala.slick.driver.H2Driver.simple._

@@ -1,0 +1,25 @@
+@(coffees: List[Coffee], coffeeSupliers: List[Tuple2[String,String]], isolationLevel: String, selectStatement: String)
+
+
+<label> All the data in the coffee table</label>
+<ul>
+  @for(coffee <- coffees) {
+    <li>@coffee.name</li>
+  }
+</ul>
+
+<label> List of Suppliers and the coffer</label>
+<table border="1">
+    <tr>
+      <td>Coffee</td><td>supplier</td>
+     </tr>
+	@for(coffeeSuplier <- coffeeSupliers) {
+	  <tr>
+	  <td>@coffeeSuplier._1</td> <td>@coffeeSuplier._2</td>
+	  </tr>
+	}
+</table>
+
+<br/>
+<strong>Database Isolation Level = @isolationLevel</strong><br/>
+<strong>Select statment - @selectStatement</strong>

@@ -1,0 +1,13 @@
+@(coffeeSupplierId: Int,supplierId: Int,supplierName: String)
+
+
+@coffeeSupplierId match {
+  
+  case `supplierId` => {
+  	<option name="supID" id="supID" value="@supplierId"  selected>@supplierName</option>
+  }
+
+  case _ => {
+  	<option name="supID" id="supID" value="@supplierId" >@supplierName</option>
+  }
+}

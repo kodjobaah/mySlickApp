@@ -1,18 +1,34 @@
 
+import org.specs2.mutable._
 
-import org.fluentlenium.adapter.FluentTest
-import org.scalatest.ShouldMatchers
 import org.scalatest.WordSpec
-import play.api.test.WithBrowser
-import play.api.test.TestBrowser
+import org.scalatest.Matchers
+
 import play.api.test.Helpers.running
 import play.api.test.Helpers.FIREFOX
-import org.scalatest.FunSuite
+import play.api.test._
+import play.api.test.Helpers.await
+import play.api.test.Helpers.wsUrl
+import play.api.libs.ws.Response
 
-class IndexPageSpec extends FunSuite with ShouldMatchers {
+class IndexPageSpec extends WordSpec with Matchers {
 
-	"running in browser" in new WithBrowser{
+  "Application" should {
+    
+    	"work from within a browser" in  {
+    		running(TestServer(3333)) {
+    			await(wsUrl("http://localhost")(3333).get).statusText contains("OK")
+
+    		}
+    	}
+      /*
+	"work from within a browser" in new WithBrowser(webDriver = FIREFOX, app = FakeApplication(), port = 9000) {
 	    browser.goTo("/")
 	    
 	}
+
+	*/
+	
+  }
+	  
 }

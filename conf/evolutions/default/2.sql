@@ -1,20 +1,47 @@
-# supplier schema
+# suppliers schema
 
 # --- !Ups
-create table supplier (
-       snum char(2) NOT NULL PRIMARY KEY,
-       sname varchar(255) NOT NULL,
-       status integer NOT NULL,
-       city varchar(255) NOT NULL
-);
+create table suppliers (
+       	     sup_id INT NOT NULL PRIMARY KEY,
+	     sup_name VARCHAR(255),
+	     street  VARCHAR(255),
+	     city    VARCHAR(255),
+	     state   VARCHAR(255),
+	     zip VARCHAR(255));
+INSERT INTO suppliers(sup_id,sup_name,street, city, state,zip) 
+       	    values (101, "Acme, Inc.", "99 Market Street", "Groundsville", "CA", "95199");
+INSERT INTO suppliers(sup_id,sup_name,street, city, state,zip) 
+       	    values (49, "Superior Coffee", "1 Party Place", "Mendocino", "CA", "95460");
+INSERT INTO suppliers(sup_id,sup_name,street, city, state,zip) 
+       	    values (150, "The High Ground", "100 Coffee Lane", "Meadows", "CA", "93966");
 
 
-INSERT INTO supplier (snum, sname, status, city) VALUES('S1','Smith',20,'London');
-INSERT INTO supplier (snum, sname, status, city) VALUES('S2','Jones',10,'Paris');
-INSERT INTO supplier (snum, sname, status, city) VALUES('S3','Blake',30,'Paris');
-INSERT INTO supplier (snum, sname, status, city) VALUES('S4','Clarke',20,'London');
-INSERT INTO supplier (snum, sname, status, city) VALUES('S5','Adams',30,'Athens');
+create table coffees (
+       	     cof_name varchar(255) NOT NULL PRIMARY KEY,
+	     sup_id int,
+	     price decimal,
+	     sales int,
+	     total int,
+	     version int);
+
+INSERT INTO coffees (cof_name, sup_id, price, sales, total) 
+       	    values ("Columbian", 101, 7.99, 0, 0,1);
+INSERT INTO coffees (cof_name, sup_id, price, sales, total) 
+       	    values ("French_Roast", 49, 8.99, 0, 0,2);
+INSERT INTO coffees (cof_name, sup_id, price, sales, total) 
+       	    values ("Espresso",150, 9.99, 0, 0,3);
+INSERT INTO coffees (cof_name, sup_id, price, sales, total) 
+       	    values ("Colombian_Decaf",101, 8.99, 0, 0,4);
+INSERT INTO coffees (cof_name, sup_id, price, sales, total) 
+       	    values ("French_Roast_Decaf",49, 9.99, 0, 0,5);
+
+
+create table coffeeversions (
+  version_id number NOT NULL PRIMARY KEY,
+  coffee_name  varchar(255),
+ );
 
 # --- !Downs
-
-drop table supplier;
+drop table suppliers;
+drop table coffeeversions;
+drop table coffees;
