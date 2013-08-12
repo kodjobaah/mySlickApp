@@ -55,8 +55,8 @@ object ActorController extends Controller {
       val secondResponse: Future[CoffeesAndSuppliers] = ask(databaseReaderSupervisor, ReadCoffeesAndSuppliers).mapTo[CoffeesAndSuppliers]
       secondResponse flatMap {
         case CoffeesAndSuppliers(allSupplierCoffees) => {
-          results flatMap { s =>  
-          future(Ok(views.html.updateCoffees(s, coffeeForm, allSupplierCoffees._1, allSupplierCoffees._2, allSupplierCoffees._3))
+          results flatMap { message =>  
+          future(Ok(views.html.updateCoffees(message, coffeeForm, allSupplierCoffees._1, allSupplierCoffees._2, allSupplierCoffees._3))
             .withHeaders(CACHE_CONTROL -> "no-cache"))
           }
         }

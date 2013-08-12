@@ -9,11 +9,11 @@ create table suppliers (
 	     state   VARCHAR(255),
 	     zip VARCHAR(255));
 INSERT INTO suppliers(sup_id,sup_name,street, city, state,zip) 
-       	    values (101, 'Acme, Inc.', '99 Market Street', 'Groundsville', 'CA', '95199');
+       	    values (101, "Acme, Inc.", "99 Market Street", "Groundsville", "CA", "95199");
 INSERT INTO suppliers(sup_id,sup_name,street, city, state,zip) 
-       	    values (49, 'Superior Coffee', '1 Party Place', 'Mendocino', 'CA', '95460');
+       	    values (49, "Superior Coffee", "1 Party Place", "Mendocino", "CA", "95460");
 INSERT INTO suppliers(sup_id,sup_name,street, city, state,zip) 
-       	    values (150, 'The High Ground', '100 Coffee Lane', 'Meadows', 'CA', '93966');
+       	    values (150, "The High Ground", "100 Coffee Lane", "Meadows", "CA", "93966");
 
 
 create table coffees (
@@ -25,15 +25,15 @@ create table coffees (
 	     version int);
 
 INSERT INTO coffees (cof_name, sup_id, price, sales, total,version) 
-       	    values ('Columbian', 101, 7.99, 0, 0,1);
+       	    values ("Columbian", 101, 7.99, 0, 0,1);
 INSERT INTO coffees (cof_name, sup_id, price, sales, total,version) 
-       	    values ('French_Roast', 49, 8.99, 0, 0,2);
+       	    values ("French_Roast", 49, 8.99, 0, 0,2);
 INSERT INTO coffees (cof_name, sup_id, price, sales, total,version) 
-       	    values ('Espresso',150, 9.99, 0, 0,3);
+       	    values ("Espresso",150, 9.99, 0, 0,3);
 INSERT INTO coffees (cof_name, sup_id, price, sales, total,version) 
-       	    values ('Colombian_Decaf',101, 8.99, 0, 0,4);
+       	    values ("Colombian_Decaf",101, 8.99, 0, 0,4);
 INSERT INTO coffees (cof_name, sup_id, price, sales, total,version) 
-       	    values ('French_Roast_Decaf',49, 9.99, 0, 0,5);
+       	    values ("French_Roast_Decaf",49, 9.99, 0, 0,5);
 
 
 create table coffeeversions (

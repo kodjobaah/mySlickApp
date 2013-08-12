@@ -3,8 +3,7 @@ package com.valtech.actors
 import akka.actor.Actor
 import akka.actor.Props
 
-import com.typesafe.slick.driver.oracle.OracleDriver.simple._
-import Database.threadLocalSession
+
 import scala.slick.session.Session
 
 import play.api.db._
@@ -22,6 +21,10 @@ class FetchCoffeesAndSuppliers extends Actor {
   override def receive: Receive = {
     case ReadCoffeesAndSuppliers => {
 
+      
+      import com.typesafe.slick.driver.oracle.OracleDriver.simple._
+      import Database.threadLocalSession
+	
       lazy val database = Database.forDataSource(DB.getDataSource(Play.configuration.getString("mySlickApp.database").get))
       val coffees = database withSession {
         val cofs = for (c <- Coffees) yield c

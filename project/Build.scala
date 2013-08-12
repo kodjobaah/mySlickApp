@@ -29,8 +29,9 @@ object ApplicationBuild extends Build {
     "org.scalatest" %% "scalatest" % "2.0.M6-SNAP26" % "test",
     "com.typesafe.slick" % "slick_2.10" % "1.0.0-RC2", 
     "com.typesafe.slick" %% "slick-extensions" % "1.0.0",
-    "mysql" % "mysql-connector-java" % "5.1.18",
+    "mysql" % "mysql-connector-java" % "5.1.18" ,
      "com.typesafe.akka" %% "akka-actor" % "2.2.0",
+     "com.typesafe.akka" %% "akka-actor-tests" %"2.2.0" % "test",
     jdbc,
     anorm
   )
