@@ -6,13 +6,11 @@ import play.api.test._
 import play.api.test.Helpers.running
 import play.api.test.Helpers.FIREFOX
 import org.scalatest.WordSpec
-import org.scalatest.Matchers
-
 /**
  * add your integration spec here.
  * An integration test will fire up a whole play application in a real (or headless) browser
  */
-class IntegrationSpec extends WordSpec with Matchers {
+class IntegrationSpec extends WordSpec {
   
   "Application" should {
     

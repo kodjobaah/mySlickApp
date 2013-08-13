@@ -12,14 +12,14 @@ import com.valtech.actors.supervisors._
 import DatabaseReaderSupervisor.ReadCoffeesAndSuppliers
 import akka.actor.actorRef2Scala
 
-class FetchCoffeesAndSuppliers extends Actor {
+class FetchCoffeesAndSuppliers(accessDatabaseService: AccessDatabaseService) extends Actor {
 
   import DatabaseReaderSupervisor.ReadCoffeesAndSuppliers
 
   override def receive: Receive = {
     case ReadCoffeesAndSuppliers => {
 
-      val coffeesAndServices: Tuple3[List[Coffee],List[Supplier], List[CoffeeVersion]] = AccessDatabaseService().fetchCoffeesAndSuppliers
+      val coffeesAndServices: Tuple3[List[Coffee],List[Supplier], List[CoffeeVersion]] = accessDatabaseService.fetchCoffeesAndSuppliers
       Cache.set(CacheVariables.coffees, (coffeesAndServices._1, coffeesAndServices._2))
 
       import FetchCoffeesAndSuppliers.CoffeesAndSuppliers
@@ -31,9 +31,9 @@ class FetchCoffeesAndSuppliers extends Actor {
 
 object FetchCoffeesAndSuppliers {
 
-  def props: Props =
-    Props(new FetchCoffeesAndSuppliers)
+    def props(accessDatabaseService: AccessDatabaseService): Props =
+    Props(new FetchCoffeesAndSuppliers(accessDatabaseService))
 
-  case class CoffeesAndSuppliers(coffeesAndSuppliers: Tuple3[List[Coffee], List[Supplier], List[CoffeeVersion]])
+    case class CoffeesAndSuppliers(coffeesAndSuppliers: Tuple3[List[Coffee], List[Supplier], List[CoffeeVersion]])
 
 }

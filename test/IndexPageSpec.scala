@@ -2,7 +2,6 @@
 import org.specs2.mutable._
 
 import org.scalatest.WordSpec
-import org.scalatest.Matchers
 
 import play.api.test.Helpers.running
 import play.api.test.Helpers.FIREFOX
@@ -11,7 +10,7 @@ import play.api.test.Helpers.await
 import play.api.test.Helpers.wsUrl
 import play.api.libs.ws.Response
 
-class IndexPageSpec extends WordSpec with Matchers {
+class IndexPageSpec extends WordSpec {
 
   "Application" should {
     

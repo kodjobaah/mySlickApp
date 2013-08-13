@@ -11,8 +11,10 @@ import models.{Supplier, Suppliers, Coffee, Coffees, CoffeeVersion, CoffeeVersio
 
 case class AccessDatabaseService(database: Database) {
 
+  def getCoffeesService() = CoffeesService()
+  def this() = this(null)
   def updateDatabase(coffee: Coffee): List[String] = {
-    val fieldsToUpdate = CoffeesService().getFieldsToUpdate(coffee)
+    val fieldsToUpdate = getCoffeesService().getFieldsToUpdate(coffee)
     val actualFieldsToUpdate = fieldsToUpdate :+ "version"
     database withSession {
       val version = Q.queryNA[Int]("select max(version) from coffees")

@@ -25,12 +25,15 @@ import OptimisticLockSupervisor.UpdateCoffee
 import children._
 import FetchCoffeesAndSuppliers.CoffeesAndSuppliers
 import UpdateCoffeesAndRelationsActor.UpdateResults
+import com.valtech.actors.services._
 
 object ActorController extends Controller {
 
   val system = ActorSystem("optimistic-lock-supervisor-system")
-  val optimisticLockSupervisor = system.actorOf(OptimisticLockSupervisor.props, "optimistic-lock-supervisor")
-  val databaseReaderSupervisor = system.actorOf(DatabaseReaderSupervisor.props, "database-reader-supervisor")
+  
+  //NOTE: Should we just be passing one database access service..or should each actor get a copy of their own
+  val optimisticLockSupervisor = system.actorOf(OptimisticLockSupervisor.props(AccessDatabaseService()), "optimistic-lock-supervisor")
+  val databaseReaderSupervisor = system.actorOf(DatabaseReaderSupervisor.props(AccessDatabaseService()), "database-reader-supervisor")
 
   //Used by ?(ask)
   implicit val timeout = Timeout(5 seconds)

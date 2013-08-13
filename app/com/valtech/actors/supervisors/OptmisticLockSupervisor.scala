@@ -14,17 +14,18 @@ import scala.concurrent.duration._
 
 import play.api.libs.concurrent.Execution.Implicits._
 
+import com.valtech.actors.services._
 import com.valtech.actors.supervisors._
 import children.UpdateCoffeesAndRelationsActor
 import children.UpdateCoffeesAndRelationsActor._
 import OptimisticLockSupervisor._
 import models.{Coffee}
 
-class OptimisticLockSupervisor extends  Actor with ActorLogging {
+class OptimisticLockSupervisor(accessDatabaseService: AccessDatabaseService) extends  Actor with ActorLogging {
   
 	//Used by ?(ask)
    implicit val timeout = Timeout(5 seconds)
-   val child = context.actorOf(UpdateCoffeesAndRelationsActor.props, name = "update-coffees-relations")
+   val child = context.actorOf(UpdateCoffeesAndRelationsActor.props(accessDatabaseService), name = "update-coffees-relations")
    override def receive: Receive = {  
       
       case PerformOperation => sender ! OperationCompleted("Should be seeing this")
@@ -49,8 +50,8 @@ class OptimisticLockSupervisor extends  Actor with ActorLogging {
 
 object OptimisticLockSupervisor {
 
-  def props : Props =
-    Props(new OptimisticLockSupervisor)
+  def props(accessDatabaseService: AccessDatabaseService) : Props =
+    Props(new OptimisticLockSupervisor(accessDatabaseService))
     
   case object PerformOperation
   case class OperationCompleted(message: String)

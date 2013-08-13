@@ -14,7 +14,7 @@ import play.api.data.Forms._
 import scala.slick.session.Session
 import play.api.libs.json._
 
-import models.{Bar, Bars, Coffees, Suppliers}
+import models.{Bar, Bars, Coffee, Coffees, Suppliers}
 
 import play.api.db._
 import play.api.Play.current
