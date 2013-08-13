@@ -4,17 +4,6 @@ import scala.concurrent.Future
 import scala.concurrent.duration.DurationInt
 import scala.concurrent.future
 
-import com.valtech.actors.DatabaseReaderSupervisor
-import com.valtech.actors.DatabaseReaderSupervisor.ReadCoffeesAndSuppliers
-import com.valtech.actors.FetchCoffeesAndSuppliers.CoffeesAndSuppliers
-import com.valtech.actors.OptimisticLockSupervisor
-import com.valtech.actors.OptimisticLockSupervisor.UpdateCoffee
-import com.valtech.actors.UpdateCoffeesAndRelationsActor.UpdateResults
-
-import akka.actor.ActorSystem
-import akka.pattern.ask
-import akka.util.Timeout
-import models.Coffee
 import play.api.data.Form
 import play.api.data.Forms.mapping
 import play.api.data.Forms.number
@@ -24,6 +13,18 @@ import play.api.data.format.Formats.doubleFormat
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.Action
 import play.api.mvc.Controller
+
+import akka.actor.ActorSystem
+import akka.pattern.ask
+import akka.util.Timeout
+
+import models.Coffee
+import com.valtech.actors.supervisors.{DatabaseReaderSupervisor, OptimisticLockSupervisor, children}
+import DatabaseReaderSupervisor.ReadCoffeesAndSuppliers
+import OptimisticLockSupervisor.UpdateCoffee
+import children._
+import FetchCoffeesAndSuppliers.CoffeesAndSuppliers
+import UpdateCoffeesAndRelationsActor.UpdateResults
 
 object ActorController extends Controller {
 

@@ -1,23 +1,20 @@
 package com.valtech.actors
 
-import akka.actor.ActorSystem
-import akka.testkit.TestKit
-import akka.testkit.ImplicitSender
-
-import play.api.Play.current
-import play.api.test._
-import play.core.StaticApplication
-import play.test.WithApplication
-import play.test.Helpers.inMemoryDatabase
-
-import scala.concurrent.duration._
-
+import scala.concurrent.duration.DurationInt
 import org.scalatest.BeforeAndAfterAll
-import org.scalatest.WordSpecLike
 import org.scalatest.Matchers
-
-import com.valtech.actors._
+import org.scalatest.WordSpecLike
 import DatabaseReaderSupervisor.ReadCoffeesAndSuppliers
+import FetchCoffeesAndSuppliers.CoffeesAndSuppliers
+import akka.actor.ActorSystem
+import akka.actor.actorRef2Scala
+import akka.testkit.ImplicitSender
+import akka.testkit.TestKit
+import play.api.test.FakeApplication
+import play.api.test.Helpers.inMemoryDatabase
+import play.api.test.Helpers.running
+import com.valtech.actors.supervisors.DatabaseReaderSupervisor
+import com.valtech.actors.supervisor.children.FetchCoffeesAndSuppliers
 
 class DatabaseReaderSupervisorSpec(_system: ActorSystem) extends TestKit(_system) with WordSpecLike with Matchers with ImplicitSender with BeforeAndAfterAll {
 
@@ -28,8 +25,7 @@ class DatabaseReaderSupervisorSpec(_system: ActorSystem) extends TestKit(_system
     system.awaitTermination()
   }
 
-
-
+  
   "DatabaseReaderSupervisor" should {
     "receive Message ReadCoffeesAndSuppliers" in {
       import play.api.test.Helpers.running
@@ -38,7 +34,7 @@ class DatabaseReaderSupervisorSpec(_system: ActorSystem) extends TestKit(_system
       running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
         val databaseReaderSupervisor = system.actorOf(DatabaseReaderSupervisor.props)
         databaseReaderSupervisor ! ReadCoffeesAndSuppliers
-        expectMsg(ReadCoffeesAndSuppliers)
+        expectMsgType[CoffeesAndSuppliers](1 second)
       }
     }
 
