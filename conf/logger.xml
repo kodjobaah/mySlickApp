@@ -15,23 +15,23 @@
     </encoder>
   </appender>
   
-  <logger name="com.valtech">
+  <logger name="com.valtech" level="INFO">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
   </logger>
-  <logger name="scala.concurrent">
+  <logger name="scala.concurrent" levle="INFO">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
   </logger>
   
-  <logger name="play" level="TRACE">
+  <logger name="play" level="INFO">
       <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
   </logger>
-  <logger name="akka" level="TRACE" />
-  <logger name="application" level="TRACE" />
+  <logger name="akka" level="INFO" />
+  <logger name="application" level="INFO" />
 
-  <root level="TRACE">
+  <root level="INFO">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
   </root>

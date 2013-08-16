@@ -16,7 +16,7 @@ case class AccessDatabaseService(database: Database) {
   def updateDatabase(coffee: Coffee): List[String] = {
     val fieldsToUpdate = getCoffeesService().getFieldsToUpdate(coffee)
     val actualFieldsToUpdate = fieldsToUpdate :+ "version"
-    database withSession {
+    database withTransaction {
       val version = Q.queryNA[Int]("select max(version) from coffees")
       val newVersion = version.first() + 1;
       actualFieldsToUpdate foreach {
@@ -57,6 +57,10 @@ case class AccessDatabaseService(database: Database) {
 
         }
       }
+      println("********************************************* sleeping**********************")
+      //Thread.sleep(5000)
+      //throw new RuntimeException()
+      println("********************************************* woken up ***********************")
       //Updating the coffeeversions
       val coffeeVersion = CoffeeVersion(newVersion, coffee.name)
       CoffeeVersions insert coffeeVersion
@@ -68,7 +72,7 @@ case class AccessDatabaseService(database: Database) {
   
   def fetchCoffeesAndSuppliers: Tuple3[List[Coffee],List[Supplier],  List[CoffeeVersion]] = {
     
-    val coffees = database withSession {
+    val coffees = database withTransaction {
         val cofs = for (c <- Coffees) yield c
         cofs.list
       }

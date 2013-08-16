@@ -23,15 +23,20 @@ import models.{Coffee}
 
 class OptimisticLockSupervisor(accessDatabaseService: AccessDatabaseService) extends  Actor with ActorLogging {
   
+   // Map of pending children and orginal sender
+  import akka.actor.ActorRef
+  var pendingChildren = Map[ActorRef, ActorRef]()
+  
 	//Used by ?(ask)
    implicit val timeout = Timeout(5 seconds)
    val child = context.actorOf(UpdateCoffeesAndRelationsActor.props(accessDatabaseService), name = "update-coffees-relations")
    override def receive: Receive = {  
-      
       case PerformOperation => sender ! OperationCompleted("Should be seeing this")
       case up: UpdateCoffee => {
-        val response: Future[UpdateResults] = ask(child,up).mapTo[UpdateResults]
-        response pipeTo sender
+        //val response: Future[UpdateResults] = ask(child,up).mapTo[UpdateResults]
+        //response pipeTo sender
+        pendingChildren += child -> sender
+        child forward up
       }
     
     }
@@ -39,6 +44,12 @@ class OptimisticLockSupervisor(accessDatabaseService: AccessDatabaseService) ext
    override def supervisorStrategy = OneForOneStrategy() {
 		case _: ActorInitializationException => Stop
 		case _: ActorKilledException => Stop
+		case _: RuntimeException => { 
+					log.info("**************************** caught runtime exception*****************")
+					log.info("******************* sender *******"+sender.toString)
+					log.info(pendingChildren.get(sender).get.toString)
+					pendingChildren.get(sender).get ! ProblemsWithUpdate
+					Restart}
 		case _: Exception => Restart
    
    }
@@ -56,6 +67,7 @@ object OptimisticLockSupervisor {
   case object PerformOperation
   case class OperationCompleted(message: String)
   case class UpdateCoffee(coffee: Coffee)
+  case object ProblemsWithUpdate
 
   
 }

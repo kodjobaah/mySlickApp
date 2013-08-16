@@ -43,6 +43,7 @@ http://localhost:9000/actorIntegration
 
 
 
+GStreamer -- Installation
 
-
-
+GST_PLUGIN -- make sure this is not set.. This needs to be set for gst-inspect to work
+OSSBUILD_GST -- make sure this is not set..

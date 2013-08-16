@@ -16,12 +16,13 @@ import play.api.mvc.Controller
 
 import akka.actor.ActorSystem
 import akka.pattern.ask
+import akka.pattern.AskTimeoutException
 import akka.util.Timeout
 
 import models.Coffee
 import com.valtech.actors.supervisors.{DatabaseReaderSupervisor, OptimisticLockSupervisor, children}
 import DatabaseReaderSupervisor.ReadCoffeesAndSuppliers
-import OptimisticLockSupervisor.UpdateCoffee
+import OptimisticLockSupervisor._
 import children._
 import FetchCoffeesAndSuppliers.CoffeesAndSuppliers
 import UpdateCoffeesAndRelationsActor.UpdateResults
@@ -36,7 +37,7 @@ object ActorController extends Controller {
   val databaseReaderSupervisor = system.actorOf(DatabaseReaderSupervisor.props(AccessDatabaseService()), "database-reader-supervisor")
 
   //Used by ?(ask)
-  implicit val timeout = Timeout(5 seconds)
+  implicit val timeout = Timeout(1 seconds)
 
   val coffeeForm = Form(
     mapping(
@@ -50,36 +51,55 @@ object ActorController extends Controller {
   def performOperation = Action { implicit request =>
     var coffee = coffeeForm.bindFromRequest.get
 
-    val response: Future[UpdateResults] = ask(optimisticLockSupervisor, UpdateCoffee(coffee)).mapTo[UpdateResults]
+    val response: Future[Any] = ask(optimisticLockSupervisor, UpdateCoffee(coffee)).mapTo[Any]
     Async {
       //Updating the tables
-      var results = response flatMap { case UpdateResults(results) => future(results) }
+      var results = response.flatMap(
+    		   {
+    		     case UpdateResults(results) => future(results)
+    		     case ProblemsWithUpdate => future("Something Went Wrong")
+    		   }
+    		  
+    		  ).recover {
+    		  	case _: AskTimeoutException => future(Ok(views.html.timeout("TIME OUT")))
+      		  }
 
       //Fetching the new updated tables
       val secondResponse: Future[CoffeesAndSuppliers] = ask(databaseReaderSupervisor, ReadCoffeesAndSuppliers).mapTo[CoffeesAndSuppliers]
       secondResponse flatMap {
         case CoffeesAndSuppliers(allSupplierCoffees) => {
-          results flatMap { message =>  
-          future(Ok(views.html.updateCoffees(message, coffeeForm, allSupplierCoffees._1, allSupplierCoffees._2, allSupplierCoffees._3))
-            .withHeaders(CACHE_CONTROL -> "no-cache"))
+          val result = results map { message =>  message}
+          
+          val actualResult = result.value.getOrElse("No Message").toString()
+          
+          actualResult match {
+            case "Something Went Wrong" => future(Ok("Something went wrong"))
+           // case "No Message" => future(Ok("No Message"))
+            case message: String =>{
+              println("********************** DISPLAYING PAY")
+              future(Ok(views.html.updateCoffees(actualResult, coffeeForm, allSupplierCoffees._1, allSupplierCoffees._2, allSupplierCoffees._3)).withHeaders(CACHE_CONTROL -> "no-cache"))
+            }
           }
+          
+          
         }
       }
 
-    }
-  }
+    } }
 
   def getCoffees = Action {
 
     val response: Future[CoffeesAndSuppliers] = ask(databaseReaderSupervisor, ReadCoffeesAndSuppliers).mapTo[CoffeesAndSuppliers]
     Async {
-      response flatMap {
+      response.flatMap({
         case CoffeesAndSuppliers(allSupplierCoffees) => {
           future(Ok(views.html.updateCoffees("None", coffeeForm, allSupplierCoffees._1, allSupplierCoffees._2, allSupplierCoffees._3))
             .withHeaders(CACHE_CONTROL -> "no-cache"))
         }
-
+      }) recover {
+       case _: AskTimeoutException => Ok("TIME OUT") 
       }
+      
     }
 
   }
