@@ -1,31 +1,18 @@
 package controllers
 
 import play.api._
-
 import play.api.mvc._
-
 import play.api.data.Form
-
 import play.api.data._
 import play.api.data.Forms._
-
-
-
 import scala.slick.session.Session
 import play.api.libs.json._
-
 import models.{Bar, Bars, Coffee, Coffees, Suppliers}
-
 import play.api.db._
 import play.api.Play.current
-
-// Use M
-
 import scala.slick.driver.MySQLDriver.simple._
-//import com.typesafe.slick.driver.oracle.OracleDriver.simple._
-// Use the implicit threadLocalSession
-
 import Database.threadLocalSession
+import play.api.libs.iteratee.Enumerator
 
 object Application extends Controller {
 
@@ -106,6 +93,24 @@ object Application extends Controller {
 		Ok(json).as(JSON)
 
 	}
+	
+	
+def comet = Action {
+	
+//	val events = Enumerator(
+//     """<script>console.log('kiki')</script>""",
+//     """<script>console.log('foo')</script>""",
+//     """<script>console.log('bar')</script>"""
+//  )
+//  Ok.stream(events >>> Enumerator.eof).as(HTML)
+  
+ import play.api.libs.Comet
+  val events = Enumerator("kiki", "foo", "bar")
+  Ok.stream(events &> Comet(callback = "parent.cometMessage"))
+
+}
+
+
 
  
 }

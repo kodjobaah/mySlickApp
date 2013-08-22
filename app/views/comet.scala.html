@@ -1,0 +1,85 @@
+@* comet Template File *@
+<!DOCTYPE html>
+<html>
+  <head>
+
+ <link rel='stylesheet' media='screen' href='@routes.WebJarAssets.at(WebJarAssets.locate("boostrap.min.css"))'>
+<!-- 
+ <script data-main="js/app" src="lib/require.js"></script>
+ --> 
+ <script type='text/javascript' src='@routes.WebJarAssets.at(WebJarAssets.locate("jquery.min.js"))'></script>
+
+<link href="http://vjs.zencdn.net/4.1/video-js.css" rel="stylesheet">
+<script src="http://vjs.zencdn.net/4.1/video.js"></script>
+ </head>
+ 
+ <body>
+    
+<script type="text/javascript">
+  var cometMessage = function(event) {
+
+	    console.log('Received event: ' + event);
+	    $("#stuff").append(event);
+  }
+</script>
+
+<iframe src="/comet"></iframe>
+<div>asdfasdfs</div>
+<div id="stuff"></div>
+<video id="example_video_1" class="video-js vjs-default-skin"
+  controls preload="auto" width="640" height="264"
+  poster="http://video-js.zencoder.com/oceans-clip.png"
+  data-setup='{"example_option":true}'>
+ <source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4' />
+ <source src="http://video-js.zencoder.com/oceans-clip.webm" type='video/webm' />
+ <source src="http://video-js.zencoder.com/oceans-clip.ogv" type='video/ogg' />
+</video>
+
+<video id="video" width="640" height="480" autoplay></video>
+<div>
+  <table>
+    <tr>
+    <td>
+   <label>Enter Email</label><input type="text"snap">
+    </td>
+    <td>
+    
+    </td><button>WhatAmIDoing</button>
+    </tr>
+   </table>
+<canvas id="canvas" width="640" height="480"></canvas>
+</body>
+
+<script>
+function hasGetUserMedia() {
+	  // Note: Opera is unprefixed.
+	  return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+	            navigator.mozGetUserMedia || navigator.msGetUserMedia);
+   }
+
+window.addEventListener("DOMContentLoaded", function() {
+	// Grab elements, create settings, etc.
+	var canvas = document.getElementById("canvas"),
+		context = canvas.getContext("2d"),
+		video = document.getElementById("video"),
+		videoObj = { "video": true },
+		errBack = function(error) {
+			console.log("Video capture error: ", error.code); 
+		};
+
+	// Put video listeners into place
+	if(navigator.getUserMedia) { // Standard
+		navigator.getUserMedia(videoObj, function(stream) {
+			video.src = stream;
+			video.play();
+		}, errBack);
+	} else if(navigator.webkitGetUserMedia) { // WebKit-prefixed
+		navigator.webkitGetUserMedia(videoObj, function(stream){
+			video.src = window.webkitURL.createObjectURL(stream);
+			video.play();
+		}, errBack);
+	}
+}, false);
+	
+</script>
+</html>

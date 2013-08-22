@@ -13,7 +13,7 @@ import play.api.data.format.Formats.doubleFormat
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import play.api.mvc.Action
 import play.api.mvc.Controller
-
+import play.api.db.slick.DBAction
 import akka.actor.ActorSystem
 import akka.pattern.ask
 import akka.pattern.AskTimeoutException
@@ -103,5 +103,5 @@ object ActorController extends Controller {
     }
 
   }
-
+ 
 }
