@@ -34,7 +34,16 @@ object ApplicationBuild extends Build {
     "org.scalamock" %% "scalamock-scalatest-support" % "3.0.1" % "test",
      "com.googlecode.gstreamer-java" % "gstreamer-java" % "1.5",
      "net.java.dev.jna" % "jna" % "3.5.2",
-       jdbc,
+      "org.apache.commons" % "commons-lang3" % "3.0",
+      "commons-cli" % "commons-cli" % "1.2",
+      "ch.qos.logback" % "logback-core" % "1.0.13",
+      "ch.qos.logback" % "logback-classic" % "1.0.13",
+      "ch.qos.logback" % "logback-access" % "1.0.13",
+       "com.typesafe.play" %% "play-slick" % "0.4.0", 
+       "org.webjars" % "jquery" % "1.8.2",
+       "org.webjars" % "bootstrap" % "2.1.1",
+       "org.webjars" % "webjars-play" % "2.1.0-1",
+      jdbc,
     anorm)
       //"xuggle" % "xuggle-xuggler" % "5.2",
 
