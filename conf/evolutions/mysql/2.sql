@@ -7,7 +7,8 @@ create table suppliers (
 	     street  VARCHAR(255),
 	     city    VARCHAR(255),
 	     state   VARCHAR(255),
-	     zip VARCHAR(255));
+	     zip VARCHAR(255)) engine=innodb
+;
 INSERT INTO suppliers(sup_id,sup_name,street, city, state,zip) 
        	    values (101, "Acme, Inc.", "99 Market Street", "Groundsville", "CA", "95199");
 INSERT INTO suppliers(sup_id,sup_name,street, city, state,zip) 
@@ -22,7 +23,8 @@ create table coffees (
 	     price decimal,
 	     sales int,
 	     total int,
-	     version int);
+	     version int) engine=innodb
+;
 
 INSERT INTO coffees (cof_name, sup_id, price, sales, total,version) 
        	    values ("Columbian", 101, 7.99, 0, 0,1);
@@ -39,7 +41,8 @@ INSERT INTO coffees (cof_name, sup_id, price, sales, total,version)
 create table coffeeversions (
   version_id int NOT NULL PRIMARY KEY,
   coffee_name  varchar(255)
- );
+ )engine=innodb
+;
 
 # --- !Downs
 drop table suppliers;

@@ -17,7 +17,7 @@ import play.api.libs.iteratee.Enumerator
 object Application extends Controller {
 
   //lazy val database = Database.forDataSource(DB.getDataSource())
- lazy val database = Database.forDataSource(DB.getDataSource("oracle"))
+ lazy val database = Database.forDataSource(DB.getDataSource("mysql"))
 
 	val barForm = Form (
 		mapping(

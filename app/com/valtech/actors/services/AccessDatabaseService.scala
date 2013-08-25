@@ -1,7 +1,9 @@
 package com.valtech.actors.services
 
 import scala.slick.jdbc.{ GetResult, StaticQuery => Q }
-import com.typesafe.slick.driver.oracle.OracleDriver.simple._
+//import com.typesafe.slick.driver.oracle.OracleDriver.simple._
+//import Database.threadLocalSession
+import scala.slick.driver.MySQLDriver.simple._
 import Database.threadLocalSession
 import play.api.db._
 import play.api.Play
