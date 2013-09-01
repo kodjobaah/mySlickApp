@@ -41,8 +41,6 @@ object ApplicationBuild extends Build {
       "ch.qos.logback" % "logback-core" % "1.0.13",
       "ch.qos.logback" % "logback-classic" % "1.0.13",
       "ch.qos.logback" % "logback-access" % "1.0.13",
-       "com.googlecode.javacpp" % "javacpp" % "0.5",
-       "com.googlecode.javacv" % "javacv" % "0.5",
        "com.typesafe.play" %% "play-slick" % "0.4.0", 
        "org.webjars" % "jquery" % "1.8.2",
        "org.webjars" % "bootstrap" % "2.1.1",
@@ -69,10 +67,8 @@ object ApplicationBuild extends Build {
       "-Dorg.aspectj.tracing.factory=default",
       "-Djna.library.path=C:\\pract\\play\\mySlickApp\\lib",
       "-Djava.library.path=c:\\software\\typesafe\\typesafe-console-developer-1.2.0\\lib\\sigar"),
-    Keys.fork in run := true, // Add your own project settings here      
-	externalResolvers <= resolvers.map { rs =>
-   Resolver.withDefaultResolvers(rs, mavenCentral = false) }
-    //connectInput in run := true
+    Keys.fork in run := true // Add your own project settings here      
+	    //connectInput in run := true
     ).aggregate(sub)
 
   object Dependencies {
