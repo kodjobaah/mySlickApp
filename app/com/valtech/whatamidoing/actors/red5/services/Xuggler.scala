@@ -29,6 +29,7 @@ class Xuggler(outputUrl: String) {
 	  val startTime = System.nanoTime();
 	 
 	  def transmitFrame(frame: Array[Byte]) = {
+	    import play.api.Logger
 
 	    // convert byte array back to BufferedImage
 	    import java.io.InputStream
@@ -39,8 +40,10 @@ class Xuggler(outputUrl: String) {
 		val in: InputStream  = new ByteArrayInputStream(frame);
 		
 	    val bImageFromConvert: BufferedImage  = ImageIO.read(in);
+            Logger("MyApp").info("just before sending %s".format(bImageFromConvert))
 	    println("buffered image:"+bImageFromConvert)
- 	 
+
+	   if (bImageFromConvert != null)
 	    mediaWriter.encodeVideo(0, bImageFromConvert, System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
 	  
 	  }

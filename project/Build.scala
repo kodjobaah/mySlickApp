@@ -1,6 +1,7 @@
 import sbt._
 import Keys._
-import play.Project._
+import PlayProject._
+//import play.Project._
 //import com.typesafe.sbt.SbtAtmos.atmosSettings
 //import com.typesafe.sbt.SbtAtmos.traceAkka 
 // imports standard command parsing functionality
@@ -25,6 +26,7 @@ object ApplicationBuild extends Build {
 
   val appDependencies = Seq(
     // Add your project dependencies here,
+    "org.ostermiller" % "utils" % "1.07.00",
     "com.typesafe.slick" % "slick_2.10" % "1.0.0-RC2",
     "org.scalatest" %% "scalatest" % "2.0.M5b" % "test",
     "com.typesafe.slick" %% "slick-extensions" % "1.0.0",
@@ -39,6 +41,8 @@ object ApplicationBuild extends Build {
       "ch.qos.logback" % "logback-core" % "1.0.13",
       "ch.qos.logback" % "logback-classic" % "1.0.13",
       "ch.qos.logback" % "logback-access" % "1.0.13",
+       "com.googlecode.javacpp" % "javacpp" % "0.5",
+       "com.googlecode.javacv" % "javacv" % "0.5",
        "com.typesafe.play" %% "play-slick" % "0.4.0", 
        "org.webjars" % "jquery" % "1.8.2",
        "org.webjars" % "bootstrap" % "2.1.1",
@@ -55,10 +59,7 @@ object ApplicationBuild extends Build {
     testOptions in Test := Nil,
     autoScalaLibrary := false,
 
-    resolvers += "JBoss repository" at "https://repository.jboss.org/nexus/content/repositories/",
-    resolvers += "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots",
-    resolvers += "Typesafe repository" at "http://repo.typesafe.com/typesafe/releases",
-    resolvers += "Maven central" at "http://repo1.maven.org/maven2/",
+    resolvers += "Java CV" at "http://maven2.javacv.googlecode.com/git",
     
     libraryDependencies ++= Dependencies.traceAkka,
 
@@ -68,7 +69,9 @@ object ApplicationBuild extends Build {
       "-Dorg.aspectj.tracing.factory=default",
       "-Djna.library.path=C:\\pract\\play\\mySlickApp\\lib",
       "-Djava.library.path=c:\\software\\typesafe\\typesafe-console-developer-1.2.0\\lib\\sigar"),
-    Keys.fork in run := true // Add your own project settings here      
+    Keys.fork in run := true, // Add your own project settings here      
+	externalResolvers <= resolvers.map { rs =>
+   Resolver.withDefaultResolvers(rs, mavenCentral = false) }
     //connectInput in run := true
     ).aggregate(sub)
 

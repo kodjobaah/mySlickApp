@@ -24,11 +24,11 @@
     <appender-ref ref="FILE" />
   </logger>
   
-  <logger name="play" level="DEBUG"/>
+  <logger name="play" level="INFO"/>
  <logger name="akka" level="INFO" />
   <logger name="application" level="INFO" />
 
-  <root level="DEBUG">
+  <root level="INFO">
     <appender-ref ref="STDOUT" />
     <appender-ref ref="FILE" />
   </root>

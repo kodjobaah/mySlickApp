@@ -2,6 +2,7 @@ package controllers
 
 import play.api.mvc.Controller
 import play.api.mvc.Action
+import play.api.Logger
 
 import java.awt.image.BufferedImage
 import java.io.File
@@ -55,6 +56,7 @@ object Index extends Controller {
     v = v + 1
     import com.valtech.whatamidoing.actors.red5.RTMPSender._
     val in = Iteratee.foreach[String](s => {
+Logger("MyApp").info("Log this %d".format(s.length()))
       println(v+":"+s.length())
       rtmpSender ! RTMPMessage(s)
      
