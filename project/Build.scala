@@ -45,10 +45,10 @@ object ApplicationBuild extends Build {
        "org.webjars" % "jquery" % "1.8.2",
        "org.webjars" % "bootstrap" % "2.1.1",
        "org.webjars" % "webjars-play" % "2.1.0-1",
+       "org.apache.commons" % "commons-email" % "1.3.1",
       jdbc,
     anorm)
       //"xuggle" % "xuggle-xuggler" % "5.2",
-
     
     //import  sbt.Project._
   val sub = play.Project(appName, appVersion, appDependencies).settings(net.virtualvoid.sbt.graph.Plugin.graphSettings: _*);

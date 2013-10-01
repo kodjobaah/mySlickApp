@@ -22,6 +22,7 @@ GET /publishVideo 					controllers.Index.publishVideo(username)
 
 GET /whatamidoing					controllers.whatamidoing.WhatAmIDoingController.whatAmIdoing
 
+POST /invite 						controllers.whatamidoing.WhatAmIDoingController.invite(email: String)
 # Obtain require.js with built-in knowledge of how webjars resources can be
 # resolved
 GET     /lib/require.js             controllers.WebJarAssets.requirejs()
