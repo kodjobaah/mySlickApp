@@ -44,12 +44,16 @@ package object mail {
       }
  
       // TODO Set authentication from your configuration, sys properties or w/e
- 
+      commonsMail.setHostName("smtp.googlemail.com");
+      commonsMail.setSmtpPort(465);
+      commonsMail.setAuthenticator(new DefaultAuthenticator("kodjobaah@gmail.com", "password"));
+      commonsMail.setSSLOnConnect(true);
       // Can't add these via fluent API because it produces exceptions
       mail.to foreach (commonsMail.addTo(_))
       mail.cc foreach (commonsMail.addCc(_))
       mail.bcc foreach (commonsMail.addBcc(_))
  
+      
       commonsMail.
         setFrom(mail.from._1, mail.from._2).
         setSubject(mail.subject).
