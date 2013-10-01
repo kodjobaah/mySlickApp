@@ -26,7 +26,7 @@ class RTMPSender(username: String) extends Actor {
       import javax.imageio.ImageIO
       try {
     	  var bufferedImage = ImageIO.read(bais);
-    	  Logger("MyApp").info("--converted buffered image:" + bufferedImage)
+    	  //Logger("MyApp").info("--converted buffered image:" + bufferedImage)
     	  xuggler.transmitBufferedImage(bufferedImage);
       } catch {
         case ex: Throwable => {

@@ -36,12 +36,12 @@ class Xuggler(outputUrl: String) {
             import javax.imageio.ImageIO
 	    import java.io.File
 	    import play.api.Logger
-		Logger.info("ABOUT TO CREATE FILE");
+		//Logger.info("ABOUT TO CREATE FILE");
               if (count == 1) {
 
 		Logger.info("CREATING FILE");
-           val outputfile = new File("/tmp/image.jpg")
-ImageIO.write(image, "jpg", outputfile)
+ //          val outputfile = new File("/tmp/image.jpg")
+//ImageIO.write(image, "jpg", outputfile)
                }
 		count = count + 1
 	    mediaWriter.encodeVideo(0, image, System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
@@ -58,9 +58,9 @@ ImageIO.write(image, "jpg", outputfile)
 	    import java.util.concurrent.TimeUnit
 		val in: InputStream  = new ByteArrayInputStream(frame);
 		
-            Logger("HMM").info("inputstream:"+in);
+  //          Logger("HMM").info("inputstream:"+in);
 	    val bImageFromConvert: BufferedImage  = ImageIO.read(in);
-            Logger("MyApp").info("just before sending %s".format(bImageFromConvert))
+   //         Logger("MyApp").info("just before sending %s".format(bImageFromConvert))
 
 	   if (bImageFromConvert != null)
 	    mediaWriter.encodeVideo(0, bImageFromConvert, System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
