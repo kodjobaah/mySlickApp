@@ -2,6 +2,7 @@ package controllers.whatamidoing
 
 import play.api.mvc.Controller
 import play.api.mvc.Action
+import play.api.Logger
 
 object WhatAmIDoingController extends Controller {
 
@@ -23,6 +24,8 @@ object WhatAmIDoingController extends Controller {
     subject = "What Am I Doing",
     message = "Click on the link http://5.79.24.141:9000/whatamidoing "
   )
+   Logger("MyApp").info("sending email to =:" + email)
+  
   	Ok("done")
   }
   
