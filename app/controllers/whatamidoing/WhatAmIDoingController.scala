@@ -19,7 +19,7 @@ object WhatAmIDoingController extends Controller {
   import com.valtech.mail.mail._
  
   send a new Mail (
-    from = ("com.valtech.mail", "John Smith"),
+    from = ("kodjobaah@gmail.com", "John Smith"),
     to = email,
     subject = "What Am I Doing",
     message = "Click on the link http://5.79.24.141:9000/whatamidoing "
