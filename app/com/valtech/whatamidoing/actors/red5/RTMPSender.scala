@@ -14,7 +14,7 @@ import akka.pattern.ask
 import play.api.Play.current
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.Logger
-
+import java.io.IOException
 import com.googlecode.javacpp._
 import com.googlecode.javacv.cpp.opencv_core._
 import com.googlecode.javacv.cpp.opencv_imgproc._
@@ -28,37 +28,84 @@ class RTMPSender(username:String) extends Actor {
 
   import RTMPSender._
   val xuggler = Xuggler(username)
+System.load("/usr/local/lib/cv2.so")                    
+System.load("/usr/local/lib/libopencv_gpuarithm.so")      
+System.load("/usr/local/lib/libopencv_gpu.so")        
+System.load("/usr/local/lib/libopencv_ml.so")           
+System.load("/usr/local/lib/libopencv_superres.so")
+System.load("/usr/local/lib/libopencv_bioinspired.so")  
+System.load("/usr/local/lib/libopencv_gpubgsegm.so")      
+System.load("/usr/local/lib/libopencv_gpustereo.so")   
+System.load("/usr/local/lib/libopencv_nonfree.so")      
+System.load("/usr/local/lib/libopencv_video.so")
+System.load("/usr/local/lib/libopencv_calib3d.so")     
+System.load("/usr/local/lib/libopencv_gpucodec.so")      
+System.load("/usr/local/lib/libopencv_gpuwarping.so")  
+System.load("/usr/local/lib/libopencv_objdetect.so")   
+System.load("/usr/local/lib/libopencv_videostab.so")
+System.load("/usr/local/lib/libopencv_contrib.so")     
+System.load("/usr/local/lib/libopencv_gpufeatures2d.so") 
+System.load("/usr/local/lib/libopencv_highgui.so")    
+System.load("/usr/local/lib/libopencv_optim.so")
+System.load("/usr/local/lib/libopencv_core.so")        
+System.load("/usr/local/lib/libopencv_gpufilters.so")    
+System.load("/usr/local/lib/libopencv_imgproc.so")    
+System.load("/usr/local/lib/libopencv_photo.so")
+System.load("/usr/local/lib/libopencv_features2d.so")  
+System.load("/usr/local/lib/libopencv_gpuimgproc.so")    
+System.load("/usr/local/lib/libopencv_softcascade.so")
+System.load("/usr/local/lib/libopencv_flann.so")        
+System.load("/usr/local/lib/libopencv_gpuoptflow.so")    
+System.load("/usr/local/lib/libopencv_legacy.so")     
+System.load("/usr/local/lib/libopencv_stitching.so")
+import com.googlecode.javacv._
+import com.googlecode.javacv.cpp.avcodec
+import com.googlecode.javacv.cpp.avcodec.AV_CODEC_ID_FLV1
+import com.googlecode.javacv.cpp.avutil
+import com.googlecode.javacv.cpp.avutil.AV_PIX_FMT_YUV420P 
+import com.googlecode.javacv.cpp.opencv_core
+import com.googlecode.javacv.cpp.opencv_core._
+import com.googlecode.javacv.cpp.opencv_core.IplImage
+Loader.load(classOf[opencv_core])
+//Loader.load(classOf[avcodec])
+//Loader.load(classOf[avutil])
+
   override def receive: Receive = {
     case RTMPMessage(message) => {
-         //import org.apache.commons.codec.binary.Base64
-          //import com.Ostermiller.util.Base64
-          import sun.misc.BASE64Decoder
-//         Logger("MyApp").info("Message Beigin decoded %s".format(message))
-
-         val messageDecoded: Array[Byte] = message.getBytes()
- //        Logger("MyApp").info("Message After decoded %s".format(messageDecoded))
-
-         //val bytes64 = Base64.decodeBase64(messageDecoded)
-         //val bytes64 = Base64.decodeToBytes(message)
+         import sun.misc.BASE64Decoder
          val base64: BASE64Decoder = new BASE64Decoder();
-
-         Logger("MyApp").info("Message length base64 before decode %d".format(message.length()))
          val bytes64: Array[Byte] = base64.decodeBuffer(message);
          Logger("MyApp").info("Message length base64 after decode %d".format(bytes64.size))
+
+         Logger("MyApp").info("Message length base64 after decode %d".format(bytes64.size))
+	 import java.io.ByteArrayInputStream
+	 val bais : ByteArrayInputStream  = new ByteArrayInputStream(bytes64)
+
+	import javax.imageio.ImageIO
+        try {
+        var bufferedImage = ImageIO.read(bais);
+/*
 	 import java.nio.ByteBuffer
          import java.nio.ByteOrder
          var wrappedData = ByteBuffer.wrap(bytes64)
-	Logger("wrapped data").info("--wrapped datea:"+wrappedData)
-         var mat = cvMat(1, bytes64.length,CV_BGRA2BGR, new BytePointer(wrappedData))
-         Logger("mata data").info("-- mat dat--"+mat)
-         var image = cvDecodeImage(mat)
-         Logger("MyApp").info("---- image--:"+image)
-	if (image != null) {
-         val c: BufferedImage  = image.getBufferedImage()
-             xuggler.transmitBufferedImage(c)
-         }
+	 val bytePointer = new BytePointer(wrappedData)
+         val image = cvCreateImageHeader(cvSize(352,288), IPL_DEPTH_8U, 1)
+         image.imageData(bytePointer)
 
-         //xuggler.transmitFrame(bytes64)
+	val imgb = image.getBufferedImage()
+        Logger("MyApp").info("--buffered image:"+imgb)
+        import com.xuggle.xuggler.video.ConverterFactory
+	val nimg = ConverterFactory.convertToType(imgb,BufferedImage.TYPE_3BYTE_BGR)
+        Logger("MyApp").info("--converted buffered image:"+nimg)
+*/
+        Logger("MyApp").info("--converted buffered image:"+bufferedImage)
+        xuggler.transmitBufferedImage(bufferedImage);
+    	} catch {
+		case ex: Throwable =>{
+            		println(ex)
+          	}
+    	}
+
     }
   }
 }

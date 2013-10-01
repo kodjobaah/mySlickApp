@@ -56,7 +56,7 @@ object Index extends Controller {
     v = v + 1
     import com.valtech.whatamidoing.actors.red5.RTMPSender._
     val in = Iteratee.foreach[String](s => {
-Logger("MyApp").info("Log this %d".format(s.length()))
+Logger("MyApp").info("Log established %d".format(s.length()))
       println(v+":"+s.length())
       rtmpSender ! RTMPMessage(s)
      

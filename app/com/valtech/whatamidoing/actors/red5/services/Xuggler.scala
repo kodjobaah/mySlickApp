@@ -25,7 +25,8 @@ class Xuggler(outputUrl: String) {
 
   val mediaWriter: IMediaWriter =
                ToolFactory.makeWriter("rtmp://localhost:1935/oflaDemo/kodjo.flv")
-      mediaWriter.addVideoStream(0, 0, ICodec.ID.CODEC_ID_FLV1,640, 480)
+      mediaWriter.addVideoStream(0, 0, ICodec.ID.CODEC_ID_FLV1,352, 288)
+      //mediaWriter.addVideoStream(0, 0, ICodec.ID.CODEC_ID_FLV1,640, 480)
 	 
 	  val startTime = System.nanoTime()
 	 
@@ -57,9 +58,9 @@ ImageIO.write(image, "jpg", outputfile)
 	    import java.util.concurrent.TimeUnit
 		val in: InputStream  = new ByteArrayInputStream(frame);
 		
+            Logger("HMM").info("inputstream:"+in);
 	    val bImageFromConvert: BufferedImage  = ImageIO.read(in);
             Logger("MyApp").info("just before sending %s".format(bImageFromConvert))
-	    println("buffered image:"+bImageFromConvert)
 
 	   if (bImageFromConvert != null)
 	    mediaWriter.encodeVideo(0, bImageFromConvert, System.nanoTime() - startTime, TimeUnit.NANOSECONDS);
