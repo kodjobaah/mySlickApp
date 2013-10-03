@@ -44,13 +44,7 @@ object WhatAmIDoingController extends Controller {
     val ln = lastName.get
     
     val search = "match a:User where a.email = \""+em+"\" return a.password as pasword, a.email as email"
-    var res = Cypher(
-    	"""
-  		match a:User 
-  		where a.email = {email}
-  		return a.password as pasword, a.email as email
-    	"""
-    ).on("email" -> em)
+    var res = Cypher(search)
  
  	val response = res.apply().map(row => 	row[String]("password")).toList
  	Logger("My App").info("response:"+res)
