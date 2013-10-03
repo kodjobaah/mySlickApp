@@ -58,7 +58,7 @@ object WhatAmIDoingController extends Controller {
  	
  	
  	var stuff = "Not Logged In"
- 	if (response.size > 0) {
+ 	if (response.size < 1) {
  		val pw_hash = BCrypt.hashpw(p, BCrypt.gensalt())
  	
   		val s= "create ("+em+":User {email:\""+em+"\",password:\""+pw_hash+"\",firstName:\""+fn+"\",lastName:\""+ln+"\"})"
