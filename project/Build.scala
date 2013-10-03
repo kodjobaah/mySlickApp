@@ -44,6 +44,7 @@ object ApplicationBuild extends Build {
        "org.webjars" % "jquery" % "1.8.2",
        "org.webjars" % "bootstrap" % "2.1.1",
        "org.webjars" % "webjars-play" % "2.1.0-1",
+       "org.mindrot" % "jbcrypt" % "0.3m",
        "org.anormcypher" %% "anormcypher" % "0.4.3",
        "org.apache.commons" % "commons-email" % "1.3.1"
        )

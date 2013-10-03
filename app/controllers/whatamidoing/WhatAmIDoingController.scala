@@ -49,17 +49,33 @@ object WhatAmIDoingController extends Controller {
  	val response = res.apply().map(row => 	row[String]("password")).toList
  	Logger("My App").info("response:"+response)
  	
+ 	import org.mindrot.jbcrypt.BCrypt
+ 	
+ 	
  	for(i <- response) {
  		Logger("List Members").info(i)
  	}
+ 	
+ 	
+ 	var stuff = "Not Logged In"
  	if (response.size > 0) {
-  		val s= "create ("+em+":User {email:\""+em+"\",password:\""+p+"\",firstName:\""+fn+"\",lastName:\""+ln+"\"})"
+ 		val pw_hash = BCrypt.hashpw(p, BCrypt.gensalt())
+ 	
+  		val s= "create ("+em+":User {email:\""+em+"\",password:\""+pw_hash+"\",firstName:\""+fn+"\",lastName:\""+ln+"\"})"
   		Logger("MyApp").info("this is: "+s)
     	val newRes = Cypher(s).execute()
+    	stuff = "New User"
+    } else {
+      
+      val dbhash = response.head
+      if (BCrypt.checkpw(p, dbhash)) {
+      	stuff = "Logged In"
+      } else {
+        stuff = "Wrong Password"
+      }
     }
-    Logger("MyApp").info("isponse:"+res)
     
-    future(Ok("loggedIn")) 
+    future(Ok(stuff)) 
   }
   
 }
