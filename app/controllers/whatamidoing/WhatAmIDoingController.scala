@@ -47,11 +47,11 @@ object WhatAmIDoingController extends Controller {
     	"""
   		match a:User 
   		where a.email = {email}
-  		return a
+  		return a.password as pasword, a.email as email
     	"""
-    ).on("email" -> em).apply()
+    ).on("email" -> em)
  
- 	//val response = res.apply().map(row => 	row[String](_)).toList
+ 	val response = res.apply().map(row => 	row[String]("password")).toList
  	Logger("My App").info("response:"+res)
  	if (response.size > 0) {
   		val s= "create ("+em+":User {email:\""+em+"\",password:\""+p+"\",firstName:\""+fn+"\",lastName:\""+ln+"\"})"
