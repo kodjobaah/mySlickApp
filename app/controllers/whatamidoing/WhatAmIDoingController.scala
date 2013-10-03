@@ -61,7 +61,7 @@ object WhatAmIDoingController extends Controller {
  	if (response.size < 1) {
  		val pw_hash = BCrypt.hashpw(p, BCrypt.gensalt())
  	
-  		val s= "create ("+em+":User {email:\""+em+"\",password:\""+pw_hash+"\",firstName:\""+fn+"\",lastName:\""+ln+"\"})"
+  		val s= "create ("+fn+":User {email:\""+em+"\",password:\""+pw_hash+"\",firstName:\""+fn+"\",lastName:\""+ln+"\"})"
   		Logger("MyApp").info("this is: "+s)
     	val newRes = Cypher(s).execute()
     	stuff = "New User"
