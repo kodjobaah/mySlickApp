@@ -24,7 +24,7 @@ GET /whatamidoing					controllers.whatamidoing.WhatAmIDoingController.whatAmIdoi
 
 POST /invite 						controllers.whatamidoing.WhatAmIDoingController.invite(email: String)
 
-POST /registerLogin				    controllers.whatamidoing.WhatAmIDoingController.registerLogin(email: Option[String], password: Option[String], repeatPassword: Option[String], firsName: Option[String], lastName: Option[String])
+POST /registerLogin				    controllers.whatamidoing.WhatAmIDoingController.registerLogin(email: Option[String], password: Option[String], repeatPassword: Option[String], firstName: Option[String], lastName: Option[String])
 # Obtain require.js with built-in knowledge of how webjars resources can be
 # resolved
 GET     /lib/require.js             controllers.WebJarAssets.requirejs()

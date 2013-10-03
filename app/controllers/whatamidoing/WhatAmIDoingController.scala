@@ -32,13 +32,20 @@ object WhatAmIDoingController extends Controller {
   }
   
   import ExecutionContext.Implicits.global
-  def registerLogin(email: Option[String], password: Option[String], repeatPassword: Option[String], firsName: Option[String], lastName: Option[String]) =    
+  def registerLogin(email: Option[String], password: Option[String], repeatPassword: Option[String], firstName: Option[String], lastName: Option[String]) =    
   Action.async { implicit request =>
   
   	import org.anormcypher._
   	
+    val em = email.get
+    val p = password.get
+    val rp = repeatPassword.get
+    val fn = firstName.get
+    val ln = lastName.get
   	
-    Cypher("""create (user {email:email,password: password, firstName: firstName, lastName: lastName })""").execute()
+  	val s= "create (user {email:\""+em+"\",password:\""+p+"\",firstName:\""+fn+"\",lastName:\""+ln+"\")"
+  	Logger("MyApp").info("this is: "+s)
+    val res = Cypher(s).execute()
     
     future(Ok("loggedIn")) 
   }
