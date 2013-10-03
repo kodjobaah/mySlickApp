@@ -47,7 +47,7 @@ object WhatAmIDoingController extends Controller {
     var res = Cypher(search)
  
  	val response = res.apply().map(row => 	row[String]("password")).toList
- 	Logger("My App").info("response:"+res)
+ 	Logger("My App").info("response:"+response)
  	if (response.size > 0) {
   		val s= "create ("+em+":User {email:\""+em+"\",password:\""+p+"\",firstName:\""+fn+"\",lastName:\""+ln+"\"})"
   		Logger("MyApp").info("this is: "+s)
