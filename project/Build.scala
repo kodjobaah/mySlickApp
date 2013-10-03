@@ -1,7 +1,6 @@
 import sbt._
 import Keys._
-import PlayProject._
-//import play.Project._
+import play.Project._
 //import com.typesafe.sbt.SbtAtmos.atmosSettings
 //import com.typesafe.sbt.SbtAtmos.traceAkka 
 // imports standard command parsing functionality
@@ -41,24 +40,26 @@ object ApplicationBuild extends Build {
       "ch.qos.logback" % "logback-core" % "1.0.13",
       "ch.qos.logback" % "logback-classic" % "1.0.13",
       "ch.qos.logback" % "logback-access" % "1.0.13",
-       "com.typesafe.play" %% "play-slick" % "0.4.0", 
+       "com.typesafe.play" %% "play-slick" % "0.4.0" exclude("org.scala-stm", "scala-stm_2.10.0"), 
        "org.webjars" % "jquery" % "1.8.2",
        "org.webjars" % "bootstrap" % "2.1.1",
        "org.webjars" % "webjars-play" % "2.1.0-1",
-       "org.apache.commons" % "commons-email" % "1.3.1",
-      jdbc,
-    anorm)
+       "org.anormcypher" %% "anormcypher" % "0.4.3",
+       "org.apache.commons" % "commons-email" % "1.3.1"
+       )
       //"xuggle" % "xuggle-xuggler" % "5.2",
     
-    //import  sbt.Project._
-  val sub = play.Project(appName, appVersion, appDependencies).settings(net.virtualvoid.sbt.graph.Plugin.graphSettings: _*);
-
-  val main = play.Project(appName, appVersion, appDependencies).settings(
-    testOptions in Test := Nil,
-    autoScalaLibrary := false,
-
-    resolvers += "Java CV" at "http://maven2.javacv.googlecode.com/git",
+    val main = play.Project(appName, appVersion, appDependencies).settings(
+    //resolvers += "anormcypher" at "http://repo.anormcypher.org/",
     
+    resolvers ++= Seq(
+    	"anormcypher" at "http://repo.anormcypher.org/"
+    ),
+    testOptions in Test := Nil,
+ 	 
+ 	// resolvers += "Typesafe Releases" at "http://repo.typesafe.com/typesafe/releases/",
+    // resolvers += "Java CV" at "http://maven2.javacv.googlecode.com/git",
+         
     libraryDependencies ++= Dependencies.traceAkka,
 
     scalacOptions += "-language:postfixOps",
@@ -69,8 +70,8 @@ object ApplicationBuild extends Build {
       "-Djava.library.path=c:\\software\\typesafe\\typesafe-console-developer-1.2.0\\lib\\sigar"),
     Keys.fork in run := true // Add your own project settings here      
 	    //connectInput in run := true
-    ).aggregate(sub)
-
+    )
+    
   object Dependencies {
 
     object V {

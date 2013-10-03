@@ -48,11 +48,10 @@ object ActorController extends Controller {
       "total" -> number,
       "version" -> number)(Coffee.apply)(Coffee.unapply))
 
-  def performOperation = Action { implicit request =>
+  def performOperation = Action.async({ implicit request =>
     var coffee = coffeeForm.bindFromRequest.get
 
     val response: Future[Any] = ask(optimisticLockSupervisor, UpdateCoffee(coffee)).mapTo[Any]
-    Async {
       //Updating the tables
       var results = response.flatMap(
     		   {
@@ -85,13 +84,13 @@ object ActorController extends Controller {
         }
       }
 
-    } }
+    })
 
-  def getCoffees = Action {
-
-    val response: Future[CoffeesAndSuppliers] = ask(databaseReaderSupervisor, ReadCoffeesAndSuppliers).mapTo[CoffeesAndSuppliers]
-    Async {
-      response.flatMap({
+  def getCoffees = 
+  
+    Action.async {
+      val response: Future[CoffeesAndSuppliers] = ask(databaseReaderSupervisor, ReadCoffeesAndSuppliers).mapTo[CoffeesAndSuppliers]
+	  response.flatMap({
         case CoffeesAndSuppliers(allSupplierCoffees) => {
           future(Ok(views.html.updateCoffees("None", coffeeForm, allSupplierCoffees._1, allSupplierCoffees._2, allSupplierCoffees._3))
             .withHeaders(CACHE_CONTROL -> "no-cache"))
@@ -100,7 +99,7 @@ object ActorController extends Controller {
        case _: AskTimeoutException => Ok("TIME OUT") 
       }
       
-    }
+    
 
   }
  

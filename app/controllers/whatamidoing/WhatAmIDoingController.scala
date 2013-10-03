@@ -16,7 +16,7 @@ object WhatAmIDoingController extends Controller {
   	
   	
   import com.valtech.mail._
-  import com.valtech.mail.mail._
+  import com.valtech.mail.mailer._
  
   send a new Mail (
     from = ("kodjobaah@gmail.com", "What Am I doing!!"),
@@ -29,4 +29,9 @@ object WhatAmIDoingController extends Controller {
   	Ok("done")
   }
   
+  
+  def registerLogin(email:String, password: String, repeatPassword: String, firsName: String, lastName: String) = Action {
+  
+    Ok("loggedIn") 
+  }
 }

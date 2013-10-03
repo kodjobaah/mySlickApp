@@ -1,7 +1,7 @@
 package com.valtech.mail
 
 
-package object mail {
+ object mailer {
  
   implicit def stringToSeq(single: String): Seq[String] = Seq(single)
   implicit def liftToOption[T](t: T): Option[T] = Some(t)

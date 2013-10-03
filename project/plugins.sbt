@@ -7,6 +7,7 @@ logLevel := Level.Info
 
 // The Typesafe repository
 resolvers ++= Seq(
+	"anormcypher" at "http://repo.anormcypher.org/",
 		"Typesafe maven repository" at "http://repo.typesafe.com/typesafe/releases/",
 		"Maven Repository" at "http://repo1.maven.org/maven2/", 
 		Resolver.url("Sbt Plugins Artifactory", new URL("http://scalasbt.artifactoryonline.com/scalasbt/sbt-plugin-releases/"))(Resolver.ivyStylePatterns),
@@ -14,7 +15,7 @@ resolvers ++= Seq(
 )
 
 // Use the Play sbt plugin for Play projects
-addSbtPlugin("play" % "sbt-plugin" % "2.1.3")
+addSbtPlugin("com.typesafe.play" % "sbt-plugin" % "2.2.0")
         
-addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.7.0")
+//addSbtPlugin("net.virtual-void" % "sbt-dependency-graph" % "0.7.0")
 
