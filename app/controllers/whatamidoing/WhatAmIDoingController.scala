@@ -3,6 +3,8 @@ package controllers.whatamidoing
 import play.api.mvc.Controller
 import play.api.mvc.Action
 import play.api.Logger
+import scala.concurrent._
+import scala.concurrent.future
 
 object WhatAmIDoingController extends Controller {
 
@@ -29,9 +31,16 @@ object WhatAmIDoingController extends Controller {
   	Ok("done")
   }
   
+  import ExecutionContext.Implicits.global
+  def registerLogin(email: Option[String], password: Option[String], repeatPassword: Option[String], firsName: Option[String], lastName: Option[String]) =    
+  Action.async { implicit request =>
   
-  def registerLogin(email:String, password: String, repeatPassword: String, firsName: String, lastName: String) = Action {
-  
-    Ok("loggedIn") 
+  	import org.anormcypher._
+  	
+  	
+    Cypher("""create (user {email:email,password: password, firstName: firstName, lastName: lastName })""").execute()
+    
+    future(Ok("loggedIn")) 
   }
+  
 }
