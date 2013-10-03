@@ -42,10 +42,24 @@ object WhatAmIDoingController extends Controller {
     val rp = repeatPassword.get
     val fn = firstName.get
     val ln = lastName.get
-  	
-  	val s= "create (user {email:\""+em+"\",password:\""+p+"\",firstName:\""+fn+"\",lastName:\""+ln+"\")"
-  	Logger("MyApp").info("this is: "+s)
-    val res = Cypher(s).execute()
+    
+    var res = Cypher(
+    	"""
+  		match a:User 
+  		where a.email = {email}
+    	"""
+    ).on("email" -> em)
+ 
+ 	val password = res.apply().map(row => 
+  		row[String]("password") 
+	).toList
+ 	
+ 	if (password.size > 0) {
+  		val s= "create ("+em+":User {email:\""+em+"\",password:\""+p+"\",firstName:\""+fn+"\",lastName:\""+ln+"\"})"
+  		Logger("MyApp").info("this is: "+s)
+    	res = Cypher(s).execute()
+    }
+    Logger("MyApp").info("isponse:"+res)
     
     future(Ok("loggedIn")) 
   }
