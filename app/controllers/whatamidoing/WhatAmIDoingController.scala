@@ -63,7 +63,12 @@ object WhatAmIDoingController extends Controller {
  	
   		val s= "create ("+fn+":User {email:\""+em+"\",password:\""+pw_hash+"\",firstName:\""+fn+"\",lastName:\""+ln+"\"})"
   		Logger("MyApp").info("this is: "+s)
-    	val newRes = Cypher(s).execute()
+    	val newRes = Cypher("""
+    	
+    	create ({fn}:User {email:"{em}",password:"{pw_hash}",firstName:"{fn}",lastName:"{ln}"},
+    			{fn}:AuthenticationToken {token="{token}",valid={valid}},
+    			{fn}User-[:HAS_TOKEN]->{fn}:AuthenticationToken)
+    	""").on("fn"->fn, "em"->em, "pw_hash"->pw_hash,"ln"->ln,"token"->"token", "valid"->"valid").execute()
     	stuff = "New User"
     } else {
       
