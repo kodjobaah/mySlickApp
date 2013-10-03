@@ -49,10 +49,10 @@ object WhatAmIDoingController extends Controller {
   		where a.email = {email}
   		return a
     	"""
-    ).on("email" -> em)
+    ).on("email" -> em).apply()
  
- 	val response = res.apply().map(row => 	row[String](_)).toList
- 	Logger("My App").info("response:"+response)
+ 	//val response = res.apply().map(row => 	row[String](_)).toList
+ 	Logger("My App").info("response:"+res)
  	if (response.size > 0) {
   		val s= "create ("+em+":User {email:\""+em+"\",password:\""+p+"\",firstName:\""+fn+"\",lastName:\""+ln+"\"})"
   		Logger("MyApp").info("this is: "+s)
