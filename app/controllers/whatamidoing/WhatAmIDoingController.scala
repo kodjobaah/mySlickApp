@@ -51,6 +51,8 @@ object WhatAmIDoingController extends Controller {
  	
  	import org.mindrot.jbcrypt.BCrypt
  
+ 
+ 	var result = future(Ok(stuff)) 
  	var stuff = "Not Logged In"
  	if (response.size < 1) {
  		val pw_hash = BCrypt.hashpw(p, BCrypt.gensalt())
@@ -77,7 +79,7 @@ object WhatAmIDoingController extends Controller {
       		if (tok._2 == "true") {
       		Logger("WhatAmIDoingController.registerLogin").info("adding to cookie: "+tok._1)
       		import play.api.mvc.Cookie
-      			future(
+      		result = future(
       				Ok("DID THE STUFF").withSession(
       					"whatAmIdoing-authenticationToken" -> tok._1) 
 			     )
@@ -88,7 +90,7 @@ object WhatAmIDoingController extends Controller {
       	}
     }
     
-    future(Ok(stuff)) 
+   	result
   }
   
 }
