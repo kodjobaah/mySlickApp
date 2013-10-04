@@ -61,14 +61,30 @@ object WhatAmIDoingController extends Controller {
  	if (response.size < 1) {
  		val pw_hash = BCrypt.hashpw(p, BCrypt.gensalt())
  	
-  		val s= "create ("+fn+":User {email:\""+em+"\",password:\""+pw_hash+"\",firstName:\""+fn+"\",lastName:\""+ln+"\"})"
-  		Logger("MyApp").info("this is: "+s)
-    	val newRes = Cypher("""
-    	
-    	create ({fn}:User {email:"{em}",password:"{pw_hash}",firstName:"{fn}",lastName:"{ln}"},
-    			{fn}:AuthenticationToken {token="{token}",valid={valid}},
-    			{fn}User-[:HAS_TOKEN]->{fn}:AuthenticationToken)
-    	""").on("fn"->fn, "em"->em, "pw_hash"->pw_hash,"ln"->ln,"token"->"token", "valid"->"valid").execute()
+  	val s= s"""
+              create ($fn:User {email:"$em",password:"$pw_hash",firstName:"$fn",lastName:"$ln"})
+               """
+
+        val token = java.util.UUID.randomUUID  
+        val valid = "true"
+
+        val t = s"""
+                 create (token:AuthenticationToken {token:"$token",valid:"$valid"})
+                """
+
+        val linkToToken = s"""
+ 			  match a:User, b:AuthenticationToken
+			  where a.email="$em" AND b.token = "$token"
+			  create a-[r:HAS_TOKEN]->b
+			  return r
+                          """
+        val newRes = Cypher(s).execute();
+        val createToken = Cypher(t).execute();
+        val linkToken = Cypher(linkToToken).execute();
+	
+	Logger("MyApp").info("this is one: "+newRes)
+	Logger("MyApp").info("this is two: "+createToken)
+	Logger("MyApp").info("this is three: "+linkToken)
     	stuff = "New User"
     } else {
       
