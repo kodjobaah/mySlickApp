@@ -83,8 +83,9 @@ object WhatAmIDoingController extends Controller {
       				Ok("DID THE STUFF").withSession(
       					"whatAmIdoing-authenticationToken" -> tok._1) 
 			     )
+      		} else {
+      			future(Ok("TOKEN NOT VALID"))
       		}
-      		future(Ok("TOKEN NOT VALID"))
       	} else {
         	stuff = "Wrong Password"
         	future(Ok(stuff))
