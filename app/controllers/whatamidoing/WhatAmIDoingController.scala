@@ -72,8 +72,14 @@ object WhatAmIDoingController extends Controller {
       	val dbhash = response.head
       	if (BCrypt.checkpw(p, dbhash)) {
       		val tokens = Cypher(CypherBuilder.getTokenForUser(em)).apply().map(row => (row[String]("token"),row[String]("status"))).toList
-      	
-      		Logger("MyApp").info("this is the authentication token"+tokens)
+      		val tok = tokens.head
+      		if (tok._2 == "true") {
+      			future(
+      				Ok("Logged In").withSession(
+  						session + ("whatAmIdoing-authenticationToken" -> tok._1)
+					)
+			     )
+      		}
       		stuff = "Logged In"
       	} else {
         	stuff = "Wrong Password"
