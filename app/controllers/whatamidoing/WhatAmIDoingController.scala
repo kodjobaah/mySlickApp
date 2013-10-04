@@ -47,7 +47,7 @@ object WhatAmIDoingController extends Controller {
     var res = Cypher(CypherBuilder.searchForUser(em))
     val response = res.apply().map(row => 	row[String]("password")).toList
  	
- 	Logger("My App").info("response:"+response)
+ 	Logger("WhatAmIDoingController.registerLogin").info("response:"+response)
  	
  	import org.mindrot.jbcrypt.BCrypt
  
@@ -62,9 +62,9 @@ object WhatAmIDoingController extends Controller {
  		val createToken = Cypher(CypherBuilder.createToken(token,valid)).execute();
      	val linkToken = Cypher(CypherBuilder.linkUserToToken(em,token)).execute();
 	   
-		Logger("MyApp").info("this is one: "+newRes)
-		Logger("MyApp").info("this is two: "+createToken)
-		Logger("MyApp").info("this is three: "+linkToken)
+		Logger("WhatAmIDoingController.registerLogin").info("this is one: "+newRes)
+		Logger("WhatAmIDoingController.registerLogin").info("this is two: "+createToken)
+		Logger("WhatAmIDoingController.registerLogin").info("this is three: "+linkToken)
     	stuff = "New User"
     	
     } else {
@@ -73,6 +73,7 @@ object WhatAmIDoingController extends Controller {
       	if (BCrypt.checkpw(p, dbhash)) {
       		val tokens = Cypher(CypherBuilder.getTokenForUser(em)).apply().map(row => (row[String]("token"),row[String]("status"))).toList
       		val tok = tokens.head
+      		Logger("WhatAmIDoingController.registerLogin").info("this is the token: "+tok)
       		if (tok._2 == "true") {
       			future(
       				Ok("Logged In").withSession(
