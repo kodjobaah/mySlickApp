@@ -22,7 +22,6 @@ object CypherBuilder {
   def createToken(token: String, valid: String): String = {
     val t = s"""
                  create (token:AuthenticationToken {token:"$token",valid:"$valid"})
-                 return 
                 """
     return t;
   }
