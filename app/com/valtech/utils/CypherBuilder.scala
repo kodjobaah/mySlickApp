@@ -35,5 +35,15 @@ object CypherBuilder {
 			  """
     return linkToToken
   }
+  
+  def getTokenForUser(em: String): String  = {
+    
+	  val res =s"""
+			  start a = node:node_auto_index(email="$em")
+			  match a-[:HAS_TOKEN]->(b)
+			  return b.token as token , b.valid as status
+	  """
+	  return res
+  }
 
 }
