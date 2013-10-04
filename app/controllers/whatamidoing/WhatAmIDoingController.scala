@@ -79,7 +79,7 @@ object WhatAmIDoingController extends Controller {
       		import play.api.mvc.Cookie
       		 val cookies = Seq(Cookie("whatAmIdoing-authenticationToken", tok._1))
       			future(
-      				Ok("Logged In").withCookies(cookies:_*) 
+      				Ok("DID THE STUFF").withCookies(cookies:_*) 
 			     )
       		}
       		stuff = "Logged In"
