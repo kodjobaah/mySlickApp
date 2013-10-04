@@ -77,9 +77,9 @@ object WhatAmIDoingController extends Controller {
       		if (tok._2 == "true") {
       		Logger("WhatAmIDoingController.registerLogin").info("adding to cookie: "+tok._1)
       		import play.api.mvc.Cookie
-      		 val cookies = Seq(Cookie("whatAmIdoing-authenticationToken", tok._1))
       			future(
-      				Ok("DID THE STUFF").withCookies(cookies:_*) 
+      				Ok("DID THE STUFF").withSession(
+      					"whatAmIdoing-authenticationToken" -> tok._1) 
 			     )
       		}
       		stuff = "Logged In"
