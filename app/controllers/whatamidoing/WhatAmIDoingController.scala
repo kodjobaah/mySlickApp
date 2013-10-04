@@ -36,6 +36,7 @@ object WhatAmIDoingController extends Controller {
   Action.async { implicit request =>
   
   	import org.anormcypher._
+  	import com.valtech.utils.CypherBuilder
   	
     val em = email.get
     val p = password.get
@@ -43,57 +44,41 @@ object WhatAmIDoingController extends Controller {
     val fn = firstName.get
     val ln = lastName.get
     
-    val search = "match a:User where a.email = \""+em+"\" return a.password as password, a.email as email"
-    var res = Cypher(search)
- 
- 	val response = res.apply().map(row => 	row[String]("password")).toList
+    var res = Cypher(CypherBuilder.searchForUser(em))
+    val response = res.apply().map(row => 	row[String]("password")).toList
+ 	
  	Logger("My App").info("response:"+response)
  	
  	import org.mindrot.jbcrypt.BCrypt
- 	
- 	
- 	for(i <- response) {
- 		Logger("List Members").info(i)
- 	}
- 	
- 	
+ 
  	var stuff = "Not Logged In"
  	if (response.size < 1) {
  		val pw_hash = BCrypt.hashpw(p, BCrypt.gensalt())
- 	
-  	val s= s"""
-              create ($fn:User {email:"$em",password:"$pw_hash",firstName:"$fn",lastName:"$ln"})
-               """
-
-        val token = java.util.UUID.randomUUID  
+ 		val newRes = Cypher(CypherBuilder.createUser(fn,ln,em,pw_hash)).execute();
+ 		
+        val token = java.util.UUID.randomUUID.toString  
         val valid = "true"
-
-        val t = s"""
-                 create (token:AuthenticationToken {token:"$token",valid:"$valid"})
-                """
-
-        val linkToToken = s"""
- 			  match a:User, b:AuthenticationToken
-			  where a.email="$em" AND b.token = "$token"
-			  create a-[r:HAS_TOKEN]->b
-			  return r
-                          """
-        val newRes = Cypher(s).execute();
-        val createToken = Cypher(t).execute();
-        val linkToken = Cypher(linkToToken).execute();
-	
-	Logger("MyApp").info("this is one: "+newRes)
-	Logger("MyApp").info("this is two: "+createToken)
-	Logger("MyApp").info("this is three: "+linkToken)
+ 		
+ 		val createToken = Cypher(CypherBuilder.createToken(token,valid)).execute();
+     	val linkToken = Cypher(CypherBuilder.linkUserToToken(em,token)).execute();
+	   
+		Logger("MyApp").info("this is one: "+newRes)
+		Logger("MyApp").info("this is two: "+createToken)
+		Logger("MyApp").info("this is three: "+linkToken)
     	stuff = "New User"
+    	
     } else {
       
-      val dbhash = response.head
-      if (BCrypt.checkpw(p, dbhash)) {
-      	stuff = "Logged In"
-      } else {
-        stuff = "Wrong Password"
-      }
+      	val dbhash = response.head
+      	if (BCrypt.checkpw(p, dbhash)) {
+      		Ok("Hello World!").withSession(
+  				session + ("saidHello" -> "yes")
+			)
+      		
+      		stuff = "Logged In"
+      	} else {
+        	stuff = "Wrong Password"
+      	}
     }
     
     future(Ok(stuff)) 
