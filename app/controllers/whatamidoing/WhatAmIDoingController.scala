@@ -84,6 +84,7 @@ object WhatAmIDoingController extends Controller {
       					"whatAmIdoing-authenticationToken" -> tok._1) 
 			     )
       		}
+      		future(Ok("TOKEN NOT VALID"))
       	} else {
         	stuff = "Wrong Password"
         	future(Ok(stuff))
