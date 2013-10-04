@@ -75,6 +75,7 @@ object WhatAmIDoingController extends Controller {
       		val tok = tokens.head
       		Logger("WhatAmIDoingController.registerLogin").info("this is the token: "+tok)
       		if (tok._2 == "true") {
+      		Logger("WhatAmIDoingController.registerLogin").info("adding to cookie: "+tok._1)
       			future(
       				Ok("Logged In").withSession(
   						session + ("whatAmIdoing-authenticationToken" -> tok._1)
