@@ -89,8 +89,6 @@ object WhatAmIDoingController extends Controller {
         	future(Ok(stuff))
       	}
     }
-    
-   	result
   }
   
 }
